@@ -18,9 +18,9 @@ load("C:/Users/nath0050/Desktop/lncRNA/lncRNA_Rx/ctrp.auc.RData")
 load("C:/Users/nath0050/Desktop/lncRNA/lncRNA_Rx/ctrp.rna.RData")
 
 library(cluster)
-t1 <- proc.time()
-clara.ctrp <- clara(t(ctrp.rna), k=200, metric="euclidean", stand=TRUE)
-proc.time() - t1 #248.35 
+tx <- proc.time()
+clara.ctrp <- clara(t(ctrp.rna), k=200, metric="euclidean", stand=TRUE, keep.data = FALSE)
+proc.time() - tx #248.35 
 
 #Run ridge 
 library(glmnet)

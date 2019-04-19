@@ -1,7 +1,8 @@
+setwd("C:/Users/nath0050/Desktop/Reducing Genes")
+load("CTRP.BRCA.birin.RData")
 load("CTRP_CV_results.RData")
 
 dim(clara.ctrp$medoids) #200
-
 ctrp.cors <- sapply(ctrp.comb_IKres, '[', 2)
 ctrp.pvals <- sapply(ctrp.comb_IKres, '[', 3)
 
@@ -145,3 +146,62 @@ save(results.1A, results.1B, results.2A, results.2B, results.3, results.4A, resu
 
 save(time.1A, time.1B, time.2A, time.2B, time.3, time.4A, time.4B, time.4C, time.4D,
      file="CTRP.Comparison.time.RData")
+
+
+
+
+####
+load(file="CTRP.Comparison.Results.RData")
+load(file="CTRP.Comparison.time.RData")
+
+results.err <- cbind.data.frame(sapply(results.1A, '[', 1), sapply(results.1B, '[', 1), sapply(results.2A, '[', 1), sapply(results.2B, '[', 1), 
+                                sapply(results.3, '[', 1), sapply(results.4A, '[', 1), sapply(results.4B, '[', 1), sapply(results.4C, '[', 1), 
+                                sapply(results.4D, '[', 1))
+
+results.cor <- cbind.data.frame(sapply(results.1A, '[', 2), sapply(results.1B, '[', 2), sapply(results.2A, '[', 2), sapply(results.2B, '[', 2), 
+                                sapply(results.3, '[', 2), sapply(results.4A, '[', 2), sapply(results.4B, '[', 2), sapply(results.4C, '[', 2), 
+                                sapply(results.4D, '[', 2))
+
+results.pval <- cbind.data.frame(sapply(results.1A, '[', 3), sapply(results.1B, '[', 3), sapply(results.2A, '[', 3), sapply(results.2B, '[', 3), 
+                                sapply(results.3, '[', 3), sapply(results.4A, '[', 3), sapply(results.4B, '[', 3), sapply(results.4C, '[', 3), 
+                                sapply(results.4D, '[', 3))
+
+results.time <- cbind.data.frame(sapply(time.1A, '[', 1), sapply(time.1B, '[' ,1), sapply(time.2A, '[' ,1), sapply(time.2B, '[', 1), 
+                                sapply(time.3, '[', 1), sapply(time.4A, '[' ,1), sapply(time.4B, '[' ,1), sapply(time.4C, '[', 1), 
+                                sapply(time.4D, '[', 1))
+par(bty='n', cex=1.5)
+boxplot(results.err, boxcol=rainbow(9), whiskcol=rainbow(9), medcol=rainbow(9), staplecol=rainbow(9),
+        boxwex=0.5, staplewex = 0.25, outwex = 0.25, lwd=2, names=NULL, ylab="Mean squared error", lty=1)
+axis(side=2, lwd=2); axis(side=1, lwd=2, at=c(1:9))
+
+boxplot(results.cor, ylim=c(0,1), boxcol=rainbow(9), whiskcol=rainbow(9), medcol=rainbow(9), staplecol=rainbow(9),
+        boxwex=0.5, staplewex = 0.25, outwex = 0.25, lwd=2, names=NULL, ylab="Spearman correlation", lty=1, range=0)
+axis(side=2, lwd=2); axis(side=1, lwd=2, at=c(1:9))
+
+boxplot(-log10(results.pval))
+
+boxplot(results.time, boxcol=rainbow(9), whiskcol=rainbow(9), medcol=rainbow(9), staplecol=rainbow(9),
+        boxwex=0.5, staplewex = 0.25, outwex = 0.25, lwd=2, names=NULL, ylab="Time (in sec.)", lty=1)
+axis(side=2, lwd=2); axis(side=1, lwd=2, at=c(1:9))
+
+dev.off()
+par(cex=1.5, bty='n')
+plot(NULL, xlim=c(0,1), ylim=c(0,1))
+legend("center", fill=rainbow(9), border=NULL, bty='n', legend=c("1. Correlation + Ridge", "2. Correlation + LASSO", 
+                                                                 "3. Correlation + RandomForest", "4. Correlation + SVM", 
+                                                                 "5. Principal Components + Ridge", "6. AnchorDx + Ridge", 
+                                                                 "7. AnchorDx + LASSO", "8. AnchoDx + RandomForest", 
+                                                                 "9. AnchorDx + SVM"))
+
+#Correlation + ridge
+#Correlation + LASSO
+
+#Correlation + random forest
+#Correlation + svm
+
+#PCA + ridge
+
+#Anchor + ridge
+#Anchor + LASSO
+#Anchor + random forest
+#Anchor + svm
